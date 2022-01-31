@@ -10,19 +10,13 @@ export const getBooks = async (req: Request, res: Response) => {
 
   if (!book.length)
     res.status(204).json({
-      error: {
-        message: "No books saved on database",
-      },
-      data: {
-        books,
-      },
+      message: "No books saved on database",
+      data: books,
     });
 
   try {
     res.status(200).json({
-      data: {
-        books,
-      },
+      data: books,
     });
   } catch (error) {
     res.status(404).json(error);
@@ -43,9 +37,7 @@ export const createBook = async (req: Request, res: Response) => {
     await newBook.save();
     res.status(201).json({
       message: "Book created successfully",
-      data: {
-        newBook,
-      },
+      data: newBook,
     });
   } catch (error) {
     res.status(400).json(error);
@@ -57,7 +49,7 @@ export const updateBook = async (req: Request, res: Response) => {
   const { id, title, author, description } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id))
-    res.status(405).json({ error: { message: "Invalid Id" } });
+    res.status(405).json({ errors: { message: "Invalid Id" } });
 
   const updatedBook = {
     _id: id,
@@ -70,9 +62,7 @@ export const updateBook = async (req: Request, res: Response) => {
     await Book.findByIdAndUpdate(id, updatedBook, { new: true });
     res.status(201).json({
       message: "Book updated successfully",
-      data: {
-        updatedBook,
-      },
+      data: updatedBook,
     });
   } catch (error) {
     res.status(400).json(error);
@@ -84,7 +74,7 @@ export const deleteBook = async (req: Request, res: Response) => {
   const { id } = req.body;
 
   if (!mongoose.Types.ObjectId.isValid(id))
-    res.status(405).json({ error: { message: "Invalid Id" } });
+    res.status(405).json({ errors: { message: "Invalid Id" } });
 
   try {
     await Book.findByIdAndDelete(id);
