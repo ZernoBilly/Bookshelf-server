@@ -60,9 +60,10 @@ export const updateBook = async (req: Request, res: Response) => {
 
   try {
     await Book.findByIdAndUpdate(id, updatedBook, { new: true });
-    res.status(201).json({
+    const books = await Book.find();
+    res.status(200).json({
       message: "Book updated successfully",
-      data: updatedBook,
+      data: books,
     });
   } catch (error) {
     res.status(400).json(error);
@@ -78,8 +79,10 @@ export const deleteBook = async (req: Request, res: Response) => {
 
   try {
     await Book.findByIdAndDelete(id);
+    const books = await Book.find();
     res.status(200).json({
-      message: "Book updated successfully",
+      message: "Book deleted successfully",
+      data: books,
     });
   } catch (error) {
     res.status(400).json(error);
